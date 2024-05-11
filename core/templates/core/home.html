@@ -1,8 +1,8 @@
 {% extends 'base.html' %} 
-
+{% load static %}
 {% block content %}
 <div class="product-card">
-    <img class="product-img" src="https://via.placeholder.com/300" alt="Product Image">
+    <img class="product-img" src="{% static 'imgs/shoes-img3.png' %}" alt="Product Image">
     <div class="product-details">
       <h2 class="product-title">Men's Running Shoes</h2>
       <p class="product-price">$99.99</p>
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="product-card">
-    <img class="product-img" src="https://via.placeholder.com/300" alt="Product Image">
+    <img class="product-img" src="{% static 'imgs/shoes-img1.png' %}" alt="Product Image">
     <div class="product-details">
       <h2 class="product-title">Men's Running Shoes</h2>
       <p class="product-price">$99.99</p>
