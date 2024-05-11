@@ -1,11 +1,11 @@
 from django.db import models
 from django.utils.text import slugify
-
+from PIL import Image
 # Create your models here.
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
 
     class Meta:
@@ -23,7 +23,7 @@ class Category(models.Model):
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
 
     class Meta:
@@ -35,7 +35,7 @@ class Brand(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
-
+    
     def __str__(self):
         return self.name
 
@@ -56,27 +56,62 @@ class Product(models.Model):
         ordering = ("name",)
         index_together = (("id", "slug"),)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        
+        if not self.slug:
+            self.slug = slugify(self.name)
+        # Open the image
+        img = Image.open(self.image.path)
+
+        # Set the desired width and height
+        desired_width = 300
+        desired_height = 300
+
+        # Resize the image
+        img.thumbnail((desired_width, desired_height))
+
+        # Save the resized image
+        img.save(self.image.path)
     def __str__(self):
         return self.name
 
 
 class Color(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
+    slug = slug = models.SlugField(max_length=200)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 
 class Size(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=50)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
 
 
 class ProductItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    size = models.ForeignKey(Size, on_delete=models.CASCADE)
-    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name="items", on_delete=models.CASCADE)
+    size = models.ForeignKey(Size, related_name="items", on_delete=models.CASCADE)
+    color = models.ForeignKey(Color, related_name="items", on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
-    available = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.product} - {self.size} - {self.color}"
+
+    @property
+    def available(self) -> bool:
+        return self.quantity > 0
