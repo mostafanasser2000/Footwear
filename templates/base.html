@@ -32,7 +32,7 @@
       <nav>
         <ul>
           {% if request.user.is_authenticated%}
-          <li><a href="{% url 'home'%}">Home</a></li>
+          <li><a href="#">Home</a></li>
           <li><a href="#">Products</a></li>
           <li><a href="#" title="Your Cart"><i class="fas fa-shopping-cart"></i></a></li>
           <li><a href="{% url 'account_logout'%}" title="Logout"><i class="fa fa-sign-out"></i></a></li>

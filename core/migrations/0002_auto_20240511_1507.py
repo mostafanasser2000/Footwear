@@ -36,10 +36,10 @@ def create_initial_data(apps, schema_editor):
         "13.5",
         "14",
     ]
-    
+
     for size in sizes:
         Size.objects.create(name=size)
-    
+
     colors = [
         "Black",
         "White",
@@ -49,9 +49,9 @@ def create_initial_data(apps, schema_editor):
         "Grey",
         "Orange",
         "Cream",
-        "Brown"
+        "Brown",
     ]
-    
+
     for color in colors:
         Color.objects.create(name=color)
 
@@ -61,4 +61,6 @@ class Migration(migrations.Migration):
         ("core", "0001_initial"),
     ]
 
-    operations = []
+    operations = [
+        migrations.RunPython(create_initial_data),
+    ]

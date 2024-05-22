@@ -1,8 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from PIL import Image
-# Create your models here.
-
+from django.urls import reverse
 
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -14,8 +13,7 @@ class Category(models.Model):
         verbose_name_plural = "categories"
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
+        self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -32,10 +30,43 @@ class Brand(models.Model):
         verbose_name_plural = "brands"
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
+        self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
-    
+
+    def __str__(self):
+        return self.name
+
+
+class Color(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = slug = models.SlugField(max_length=50)
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "color"
+        verbose_name_plural = "colors"
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class Size(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=50)
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "size"
+        verbose_name_plural = "sizes"
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -54,51 +85,19 @@ class Product(models.Model):
 
     class Meta:
         ordering = ("name",)
-        index_together = (("id", "slug"),)
+        indexes = [
+            models.Index(fields=['id', 'slug']),
+            models.Index(fields=['name']),
+            models.Index(fields=['-created'])
+        ]
 
     def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
         super().save(*args, **kwargs)
-        
-        if not self.slug:
-            self.slug = slugify(self.name)
-        # Open the image
-        img = Image.open(self.image.path)
 
-        # Set the desired width and height
-        desired_width = 300
-        desired_height = 300
-
-        # Resize the image
-        img.thumbnail((desired_width, desired_height))
-
-        # Save the resized image
-        img.save(self.image.path)
-    def __str__(self):
-        return self.name
-
-
-class Color(models.Model):
-    name = models.CharField(max_length=200, unique=True)
-    slug = slug = models.SlugField(max_length=200)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        return super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
-
-
-class Size(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(max_length=50)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        return super().save(*args, **kwargs)
-
+    def get_absolute_url(self):
+        return reverse("core:product_detail", kwargs={"slug": self.slug, "id": self.id})
+    
     def __str__(self):
         return self.name
 
@@ -107,11 +106,7 @@ class ProductItem(models.Model):
     product = models.ForeignKey(Product, related_name="items", on_delete=models.CASCADE)
     size = models.ForeignKey(Size, related_name="items", on_delete=models.CASCADE)
     color = models.ForeignKey(Color, related_name="items", on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=0)
+    available = models.BooleanField(default=True)
 
     def __str__(self):
         return f"{self.product} - {self.size} - {self.color}"
-
-    @property
-    def available(self) -> bool:
-        return self.quantity > 0
