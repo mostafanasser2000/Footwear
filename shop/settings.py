@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "allauth.socialaccount.providers.twitter",
     "widget_tweaks",
+    "cart",
 ]
 
 MIDDLEWARE = [
