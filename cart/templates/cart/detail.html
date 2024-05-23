@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}
+  Cart
+{% endblock title %}
+{% block content %}
+{% for cart_item in cart.items.all %}
+  <div>
+    <p>Name: {{cart_item.item}}</p>
+    <p>Quantity: {{cart_item.quantity}}</p>
+    <p>Unit Price: {{cart_item.unit_price}}</p>
+    <p>Price: {{cart_item.price}}</p>
+  </div>
+  
+  
+  
+  
+{% endfor %}
+{% endblock content %}

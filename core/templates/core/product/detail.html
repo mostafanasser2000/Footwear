@@ -6,4 +6,10 @@
   {{product.name}}
   {{product.price}}
   {{product.description}}
+  <form action="{% url 'cart:user_cart' %}" method="post">
+    {% csrf_token %}
+    <input type="number" name="quantity" id="quantity" min="1" max="21" value="1">
+    <input type="hidden" name="item_id" value="{{product.id}}">
+    <input type="submit" value="Add to cart">
+  </form>
 {% endblock content %}
