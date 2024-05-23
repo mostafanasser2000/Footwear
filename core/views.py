@@ -26,9 +26,17 @@ class ProductList(ListView):
         if category:
             qs = qs.filter(Q(category__slug=category) | Q(category__name=category))
         if size:
-            qs = qs.filter(Q(size__slug=size) | Q(size__name=category))
+            qs = qs.filter(
+                id__in=ProductItem.objects.filter(size__slug=size)
+                .values("product")
+                .distinct()
+            )
         if color:
-            qs = qs.filter(Q(color__slug=size) | Q(color__name=category))
+            qs = qs.filter(
+                id__in=ProductItem.objects.filter(color__slug=color)
+                .values("product")
+                .distinct()
+            )
         return qs
 
 
