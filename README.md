@@ -1,7 +1,6 @@
 # FootWear
 
-Django based e-commerce website for buying shoes
-
+👟️ Footwear a Django-based e-commerce project aims to provide shoe enthusiasts the ultimate online shopping experience, combining a powerful backend with a beautiful and user-friendly frontend. 
 ## Preview
 
 ## Features
