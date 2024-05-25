@@ -53,6 +53,8 @@ python manage.py createsuperuser
 ```bash
 python manage.py runserver
 ```
+### Optional: to allow social authentication follow this tutorial
+https://learndjango.com/tutorials/django-allauth-tutorial
 
 now access admin dashboard to create products website at `http://127.0.0.1:8000/admin`
 
