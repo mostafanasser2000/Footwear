@@ -1,23 +1,65 @@
 {% extends 'base.html' %} 
 {% load static %}
 {% block content %}
-<div class="product-card">
-    <img class="product-img" src="{% static 'imgs/shoes-img3.png' %}" alt="Product Image">
-    <div class="product-details">
-      <h2 class="product-title">Men's Running Shoes</h2>
-      <p class="product-price">$99.99</p>
-      <p class="product-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur dolor.</p>
-      <a href="#" class="btn btn-primary">Add to Cart</a>
+<div class="categories">
+  <div class="container">
+    <div class="featured">
+      <div
+        class="featured-img featured-img2"
+        style='background-image: url("{%  static  'imgs/dress.jpg' %}")'
+      >
+        <h2>DRESS</h2>
+        <a href="{% url 'core:product_category_list' 'dress'%}" class="btn btn-primary">Shop now</a>
+      </div>
+    </div>
+    <div class="featured">
+      <div
+        class="featured-img featured-img2"
+        style='background-image: url("{%  static  'imgs/casual.jpg' %}")'
+      >
+        <h2>CASUALS</h2>
+        <a href="{% url 'core:product_category_list' 'casuals'%}" class="btn btn-primary">Shop now</a>
+      </div>
+    </div>
+    <div class="featured">
+      <div
+        class="featured-img featured-img2"
+        style='background-image: url("{%  static  'imgs/sports.jpg' %}")'
+      >
+        <h2>SPORTS</h2>
+        <a href="{% url 'core:product_category_list' 'sports'%}" class="btn btn-primary">Shop now</a>
+      </div>
     </div>
   </div>
-  <div class="product-card">
-    <img class="product-img" src="{% static 'imgs/shoes-img1.png' %}" alt="Product Image">
-    <div class="product-details">
-      <h2 class="product-title">Men's Running Shoes</h2>
-      <p class="product-price">$99.99</p>
-      <p class="product-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur dolor.</p>
-      <a href="#" class="btn btn-primary">Add to Cart</a>
+</div>
+<div class="page">
+  <div class="sidebar">
+    <div class="box">
+      <h4>BRAND</h4>
+      <ul>
+        {% for brand in  brands%}
+        <li><a href="">{{brand}}</a></li>
+      {% endfor %}
+      </ul>
+    </div>
+    <div class="box sizes">
+      <h4>SIZE</h4>
+      <ul>
+        {% for size in  sizes%}
+        <li class="btn-secondary"><a href="{% url 'core:product_size_list' size.slug%}">{{size}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="box">
+      <h4>COLOR</h4>
+      <ul>
+      {% for color in  colors%}
+      <li><a href="{% url 'core:product_color_list' color.slug%}">{{color}}</a></li>
+      {% endfor %}
+      </ul>
+     
     </div>
   </div>
-  
+{% include "core/product/list.html" with products=products%}
+</div>
 {% endblock %}

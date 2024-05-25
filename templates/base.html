@@ -8,52 +8,55 @@
     <!-- Google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="{% static 'css/normalize.css'%}" />
-    <link rel="stylesheet" href="{% static 'css/base.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
     <!-- Font awesome icons -->
-    <link rel="stylesheet" href="{% static 'css/all.min.css'%}" />
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}" />
     <title>{% block title %}{% endblock title %}</title>
-    <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
   </head>
 
   <body>
     <!-- start of header  -->
     <header>
-      <div>
-        <div class="logo">
-          <a href="#"> My Shop </a>
+      <div class="container">
+        <div>
+          <div class="logo">FootWear</div>
+          <div class="search-form">
+            <form action="{% url 'core:product_list' %}" method="get">
+              <input type="search" name="q" id="q" placeholder="search" />
+            </form>
+          </div>
         </div>
-        <div class="search-widget">
-          <form action="" method="get">
-            <input type="text" name="query" id="search" placeholder="Search" />
-          </form>
-        </div>
-      </div>
-      <nav>
-        <ul>
-          {% if request.user.is_authenticated%}
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Products</a></li>
-          <li><a href="{% url 'cart:user_cart' %}" title="Your Cart"><i class="fas fa-shopping-cart"></i></a></li>
-          <li><a href="{% url 'account_logout'%}" title="Logout"><i class="fa fa-sign-out"></i></a></li>
+        <nav>
+          <ul>
+            <li><a href="{% url 'core:product_list'%}">HOME</a></li>
+            <li><a href="{% url 'core:product_gender_list' 'men'%}">MEN</a></li>
+            <li><a href="{% url 'core:product_gender_list' 'women'%}">WOMEN</a></li>
+            <li><a href="#">ABOUT</a></li>
+            <li><a href="#">CONTACT</a></li>
+          </ul>
+          {% if user.is_authenticated %}
+            <div class="cart">
+              <a href="{% url 'cart:user_cart'%}" style="margin-right: 10px"><i class="fas fa-shopping-cart"></i> {%if cart.items.count%}[<span>{{cart.items.count}}</span>]{%endif%}</a>
+              <a href="{% url 'account_logout'%}" title="Logout"><i class="fa fa-sign-out"></i></a>
+
+            </div>
           {% else %}
-          <a href="{% url 'account_login'%}" class="btn btn-primary">Login</a>
-          <a href="{% url 'account_signup'%}" class="btn btn-secondary">SignUP</a>
-          {% endif%}
-        </ul>
-      </nav>
+            <div class="buttons">
+              <a href="{% url 'account_login'%}" class="btn btn-primary">Login</a>
+              <a href="{% url 'account_signup'%}" class="btn btn-secondary">SignUP</a>
+            </div>
+          {% endif %}
+        </nav>
+      </div>
     </header>
     <!-- End of header -->
     <main>
-      <div class="sidebar">
-        Side Bar
-      </div>
-      <div class="content">
+      <div class="container">
         {% block content %}{% endblock content %}
+
       </div>
     </main>
-    <footer>
-    </footer>
-    <script src="{% static 'js/app.js'%}"></script>
+    <script src="{% static 'js/app.js' %}"></script>
   </body>
 </html>

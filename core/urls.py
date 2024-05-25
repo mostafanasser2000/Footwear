@@ -10,6 +10,11 @@ urlpatterns = [
         name="product_category_list",
     ),
     path(
+        "gender/<str:gender>/",
+        views.ProductList.as_view(),
+        name="product_gender_list",
+    ),
+    path(
         "size/<slug:size>/",
         views.ProductList.as_view(),
         name="product_size_list",

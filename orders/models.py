@@ -16,11 +16,13 @@ class Order(models.Model):
     postal_code = models.CharField(max_length=50)
     address = models.CharField(max_length=255)
     paid = models.BooleanField(default=False)
+    phone = models.CharField(max_length=15)
 
     # coupon = models.ForeignKey()
-    # discount = models.SmallIntegerField(
-    #     validators=[MinValueValidator(0), MaxValueValidator(100)]
-    # )
+    discount = models.SmallIntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(100)], default=0
+    )
+
     class Meta:
         ordering = ["-created"]
         indexes = [models.Index(fields=["-created"])]

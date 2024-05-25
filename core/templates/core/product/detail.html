@@ -1,15 +1,38 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block title %}
-  {{product.name}}
+  {{ product.name }}
 {% endblock title %}
+
 {% block content %}
-  {{product.name}}
-  {{product.price}}
-  {{product.description}}
-  <form action="{% url 'cart:user_cart' %}" method="post">
-    {% csrf_token %}
-    <input type="number" name="quantity" id="quantity" min="1" max="21" value="1">
-    <input type="hidden" name="item_id" value="{{product.id}}">
-    <input type="submit" value="Add to cart">
-  </form>
+<div class="product-detail">
+  <div class="product-images">
+    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-main-image">
+  </div>
+  <div class="product-info">
+    <h1 class="product-title">{{ product.name }}</h1>
+    <p class="product-price">${{ product.price }}</p>
+    <p class="product-description">{{ product.description }}</p>
+    <form action="{% url 'cart:user_cart' %}" method="post" class="add-to-cart-form">
+      {% csrf_token %}
+      <label for="size">Size:</label>
+      <select name="size" id="size">
+        {% for size in available_sizes %}
+        <option value="{{ size.id }}">{{ size }}</option>
+        {% endfor %}
+      </select>
+      <label for="color">Color:</label>
+      <select name="color" id="color">
+        {% for color in available_colors %}
+        <option value="{{ color.id }}">{{ color }}</option>
+        {% endfor %}
+      </select>
+      <label for="quantity">Quantity:</label>
+      <input type="number" name="quantity" id="quantity" min="1" max="21" value="1">
+      <input type="hidden" name="item_id" value="{{ product.id }}">
+      <input type="submit" value="Add to cart" class="btn btn-primary">
+    </form>
+  </div>
+</div>
 {% endblock content %}
