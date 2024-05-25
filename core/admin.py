@@ -42,6 +42,7 @@ class ProductAdmin(admin.ModelAdmin):
         "slug",
         "price",
     ]
+    list_filter = ['category']
     prepopulated_fields = {"slug": ("name",)}
     inlines = [ProductItemInline]
 

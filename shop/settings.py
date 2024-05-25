@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-
+from django.urls import reverse_lazy
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "allauth.socialaccount.providers.twitter",
     "widget_tweaks",
+    "cart",
+    "orders",
+    "easy_thumbnails",
 ]
 
 MIDDLEWARE = [
@@ -79,6 +82,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "cart.context_processors.cart",
             ],
         },
     },
@@ -116,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+# LOGIN_REDIRECT_URL = reverse("core:product_list")
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -153,7 +157,7 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = "none"
 LOGIN_REDIRECT_URL = "/"
-LOGIN_URL = "/login"
+LOGIN_URL = reverse_lazy("account_login")
 ACCOUNT_LOGOUT_ON_GET = True
 
 SOCIALACCOUNT_PROVIDERS = {

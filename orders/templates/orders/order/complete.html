@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Order Complete
+{% endblock title %}
+
+{% block content %}
+<div class="order-complete-container">
+  <div class="order-complete-box">
+    <h1 class="order-complete-title">Thank You For Your Order!</h1>
+    <p class="order-complete-message">Your order has been successfully processed.</p>
+    <div class="order-details">
+      <h2>Order Details</h2>
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order_item in order.items.all %}
+          <tr>
+            <td>{{ order_item.item.product.name }} x {{ order_item.quantity }}</td>
+            <td>${{ order_item.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th>Subtotal</th>
+            <td>${{ order.subtotal }}</td>
+          </tr>
+          <tr>
+            <th>Discount</th>
+            <td>${{ order.discount }}</td>
+          </tr>
+          <tr>
+            <th>Total</th>
+            <td>${{ order.total }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <a href="{% url 'core:product_list' %}" class="btn btn-primary">Continue Shopping</a>
+  </div>
+</div>
+{% endblock content %}
